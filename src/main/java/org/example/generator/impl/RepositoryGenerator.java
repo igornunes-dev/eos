@@ -32,11 +32,16 @@ public class RepositoryGenerator implements CodeGenerate {
             idType = "Long";
         }
 
+        String entityName = className.endsWith("Repository")
+                ? className.substring(0, className.length() - "Repository".length())
+                : className;
+
         String modelPackage = context.detectPackageName("model");
 
         Map<String, Object> templateData = new HashMap<>();
         templateData.put("packageName", context.getFullPackageName(packageName));
         templateData.put("entityPackage", context.getFullPackageName(modelPackage));
+        templateData.put("entityName", entityName);
         templateData.put("className", className);
         templateData.put("idType", idType);
         templateData.put("hasCustomIdType", hasCustomIdType);
@@ -46,7 +51,7 @@ public class RepositoryGenerator implements CodeGenerate {
         Path packagePath = context.getPackagePath(packageName);
         Files.createDirectories(packagePath);
 
-        Path filePath = packagePath.resolve(className + "Repository.java");
+        Path filePath = packagePath.resolve(className + ".java");
 
         if (fileExists(filePath) && !params.isOverwrite()) {
             return GenerationResult.error("File already exists: " + filePath);

@@ -4,7 +4,7 @@ package ${packageName};
 import java.util.UUID;
 </#if>
 import org.springframework.data.jpa.repository.JpaRepository;
-import ${entityPackage}.${className};
+import ${entityPackage}.${entityName};
 
-public interface ${className}Repository extends JpaRepository<${className}, ${idType}> {
+public interface ${className} extends JpaRepository<${className}, ${idType}> {
 }
