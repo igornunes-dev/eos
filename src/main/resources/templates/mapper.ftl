@@ -11,9 +11,9 @@ public interface ${className} {
 
     ${className} INSTANCE = Mappers.getMapper(${className}.class);
 
-    ${dtoClassName} toDTO(${entitySimpleName} entity);
+    ${dtoSimpleName} toDTO(${entitySimpleName} entity);
 
-    ${entityClassName} toEntity(${dtoSimpleName} dto);
+    ${entitySimpleName} toEntity(${dtoSimpleName} dto);
 }
 <#else>
 import ${entityClassName};
