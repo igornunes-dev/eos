@@ -79,6 +79,9 @@ mvn eos:repository -Dname=UserRepository
 # Generate a DTO
 mvn eos:dto -Dname=UserDTO
 
+# Generate an enum
+mvn eos:enum -Dname=UserStatus
+
 # Generate a mapper
 mvn eos:mapper -Dname=UserMapper -Dentity=User -Ddto=UserDTO
 ```
@@ -263,6 +266,45 @@ public class UserDTO {
 
 ---
 
+### 🎲 Enum Generator
+
+Generates Java enums for type-safe constants.
+
+```bash
+mvn eos:enum -Dname=UserStatus
+mvn eos:enum -Dname=OrderType -Dpackage=domain.enums
+```
+
+**Smart features:**
+- Clean enum structure
+- Display name support
+- Example values as templates
+- Optional description field
+
+**Example output:**
+```java
+public enum UserStatus {
+    // TODO: Add enum constants
+    // Example:
+    // ACTIVE("Active"),
+    // INACTIVE("Inactive"),
+    // PENDING("Pending"),
+    // BLOCKED("Blocked");
+    
+    // private final String displayName;
+    
+    // UserStatus(String displayName) {
+    //     this.displayName = displayName;
+    // }
+    
+    // public String getDisplayName() {
+    //     return displayName;
+    // }
+}
+```
+
+---
+
 ### 🔄 Mapper Generator
 
 Generates mappers to convert between entities and DTOs.
@@ -320,6 +362,7 @@ Build a complete feature in under a minute:
 mvn eos:entity -Dname=User
 mvn eos:repository -Dname=UserRepository
 mvn eos:dto -Dname=UserDTO
+mvn eos:enum -Dname=UserStatus
 mvn eos:mapper -Dname=UserMapper -Dentity=User -Ddto=UserDTO
 mvn eos:service -Dname=UserService
 mvn eos:controller -Dname=UserController
@@ -335,6 +378,8 @@ src/main/java/com/example/demo/
 │   └── UserRepository.java          ✓ Generated
 ├── dto/
 │   └── UserDTO.java                 ✓ Generated
+├── enums/
+│   └── UserStatus.java              ✓ Generated
 ├── mapper/
 │   └── UserMapper.java              ✓ Generated
 ├── service/
@@ -353,12 +398,14 @@ Organize your code with custom package conventions:
 # Domain-Driven Design structure
 mvn eos:entity -Dname=Product -Dpackage=domain.model
 mvn eos:repository -Dname=ProductRepository -Dpackage=domain.repository
+mvn eos:enum -Dname=ProductCategory -Dpackage=domain.enums
 mvn eos:service -Dname=ProductService -Dpackage=application.service
 mvn eos:controller -Dname=ProductController -Dpackage=presentation.api
 
 # Clean Architecture structure
 mvn eos:entity -Dname=Order -Dpackage=core.domain.entity
 mvn eos:repository -Dname=OrderRepository -Dpackage=core.domain.repository
+mvn eos:enum -Dname=OrderStatus -Dpackage=core.domain.enums
 mvn eos:dto -Dname=OrderDTO -Dpackage=adapter.api.dto
 mvn eos:controller -Dname=OrderController -Dpackage=adapter.api.controller
 ```
@@ -376,6 +423,7 @@ mvn eos:controller -Dname=UserController -Dforce=true
 # Regenerate entire feature
 mvn eos:entity -Dname=Product -Dforce=true
 mvn eos:repository -Dname=ProductRepository -Dforce=true
+mvn eos:enum -Dname=ProductStatus -Dforce=true
 mvn eos:service -Dname=ProductService -Dforce=true
 ```
 
@@ -391,6 +439,11 @@ mvn eos:entity -Dname=Product
 mvn eos:entity -Dname=Category
 mvn eos:entity -Dname=Order
 mvn eos:entity -Dname=Customer
+
+# Generate enums for status fields
+mvn eos:enum -Dname=ProductStatus
+mvn eos:enum -Dname=OrderStatus
+mvn eos:enum -Dname=PaymentMethod
 
 # Generate repositories
 mvn eos:repository -Dname=ProductRepository
@@ -433,8 +486,8 @@ EOS automatically detects your project's package naming conventions:
 
 **How it works:**
 
-1. **Checks for plural form first:** `controllers/`, `services/`, `models/`
-2. **Falls back to singular:** `controller/`, `service/`, `model/`
+1. **Checks for plural form first:** `controllers/`, `services/`, `models/`, `enums/`
+2. **Falls back to singular:** `controller/`, `service/`, `model/`, `enum/`
 3. **Creates singular by default:** If neither exists, uses singular form
 
 **Example scenarios:**
@@ -460,6 +513,7 @@ mvn eos:controller -Dname=UserController
 ```bash
 # Force a specific package regardless of detection
 mvn eos:controller -Dname=UserController -Dpackage=api.v1.controllers
+mvn eos:enum -Dname=UserStatus -Dpackage=common.enums
 ```
 
 ---
@@ -559,6 +613,7 @@ eos/
 │   │       ├── EntityGenerator.java
 │   │       ├── RepositoryGenerator.java
 │   │       ├── DtoGenerator.java
+│   │       ├── EnumGenerator.java
 │   │       └── MapperGenerator.java
 │   ├── maven/                 # Maven Mojos
 │   │   ├── AbstractEosMojo.java
@@ -567,6 +622,7 @@ eos/
 │   │   ├── EntityMojo.java
 │   │   ├── RepositoryMojo.java
 │   │   ├── DtoMojo.java
+│   │   ├── EnumMojo.java
 │   │   └── MapperMojo.java
 │   └── template/              # Template engine
 │       └── TemplateEngine.java
@@ -577,6 +633,7 @@ eos/
     ├── entity.ftl
     ├── repository.ftl
     ├── dto.ftl
+    ├── enum.ftl
     └── mapper.ftl
 ```
 
@@ -631,6 +688,7 @@ Contributions are welcome and appreciated! Here's how you can help make EOS bett
    # Test in a sample Spring Boot project
    cd /path/to/test-project
    mvn eos:controller -Dname=TestController
+   mvn eos:enum -Dname=TestEnum
    ```
 
 5. **Commit with clear messages**
@@ -702,6 +760,7 @@ Contributions are welcome and appreciated! Here's how you can help make EOS bett
 - [x] Entity generator with JPA annotations
 - [x] Repository generator (Spring Data JPA)
 - [x] DTO generator
+- [x] Enum generator
 - [x] Mapper generator (MapStruct support)
 - [x] Smart package detection (singular/plural)
 - [x] Lombok dependency detection
@@ -899,7 +958,7 @@ EOS wouldn't be possible without these amazing projects and communities:
 ### 📧 Direct Contact
 
 - **LinkedIn:** [Igor Nunes](https://www.linkedin.com/in/igor-nunes-1392782b4/) 
-- **Email:** [Aqui](mailto:igornunesle@gmail.com)
+- **Email:** [igornunesle@gmail.com](mailto:igornunesle@gmail.com)
 
 ---
 
@@ -934,67 +993,3 @@ We'd love to know! Share your story:
 - Share metrics (time saved, productivity gains)
 
 ---
-
-## 📊 Stats & Metrics
-
-<div align="center">
-
-### Project Status
-
-![GitHub Stars](https://img.shields.io/github/stars/igornunes-dev/eos?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/igornunes-dev/eos?style=social)
-![GitHub Issues](https://img.shields.io/github/issues/igornunes-dev/eos)
-![GitHub Pull Requests](https://img.shields.io/github/issues-pr/igornunes-dev/eos)
-
-### Activity
-
-![Last Commit](https://img.shields.io/github/last-commit/igornunes-dev/eos/dev)
-![Commit Activity](https://img.shields.io/github/commit-activity/m/igornunes-dev/eos)
-
-</div>
-
----
-
-## 🎯 Success Stories
-
-*Using EOS in production? We'd love to feature your story here!*
-
-**Share your experience:**
-- How much time EOS saved you
-- Productivity improvements
-- Team adoption feedback
-
-[Submit your success story →](https://github.com/igornunes-dev/eos/discussions/new?category=show-and-tell)
-
----
-
-<div align="center">
-
-## 🚀 Ready to Boost Your Productivity?
-
-**Add EOS to your project now:**
-
-```bash
-git clone https://github.com/igornunes-dev/eos.git
-cd eos
-mvn clean install -DskipTests
-```
-
-Then add to your Spring Boot project and start generating!
-
----
-
-**Made with ❤️ by [Igor Nunes](https://github.com/igornunes-dev)**
-
-**EOS - Elegant Object Scaffolder**
-
-*Stop writing boilerplate. Start building features.*
-
----
-
-[⬆ Back to Top](#eos---elegant-object-scaffolder) | 
-[Report Bug](https://github.com/igornunes-dev/eos/issues) | 
-[Request Feature](https://github.com/igornunes-dev/eos/issues) | 
-[Discussions](https://github.com/igornunes-dev/eos/discussions)
-
-</div>
