@@ -155,4 +155,26 @@ public class ProjectContext {
                     ));
         }
     }
+
+    public Path getTestPackagePath(String packageName) {
+        Path testJavaPath = projectRoot
+                .resolve("src")
+                .resolve("test")
+                .resolve("java");
+
+        String[] packageParts = basePackage.split("\\.");
+        Path fullPath = testJavaPath;
+        for (String part : packageParts) {
+            fullPath = fullPath.resolve(part);
+        }
+
+        if (packageName != null && !packageName.isEmpty()) {
+            String[] subPackageParts = packageName.split("\\.");
+            for (String part : subPackageParts) {
+                fullPath = fullPath.resolve(part);
+            }
+        }
+
+        return fullPath;
+    }
 }
